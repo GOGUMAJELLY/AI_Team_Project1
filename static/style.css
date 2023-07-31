@@ -1,0 +1,49 @@
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: auto;
+    font-family: 'Dongle', sans-serif !important;
+    font-size: 30px;
+}
+.logo {
+    margin-bottom: 20px;
+    font-size: 2em;
+}
+.slogan {
+    margin-bottom: 20px;
+}
+.form-group {
+    margin-bottom: 10px;
+}
+
+.form-group label {
+    display: block;
+}
+.section-title {
+    font-weight: bold;
+}
+.img {
+    display: none;
+    position:absolute;
+}
+.img_text:hover+.img {
+    display: block;
+}
+.div1 {
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+}
+.div2 {
+    border: 2px solid black;
+    padding: 20px;
+    margin: 20px;
+}
+.submit {
+    display: block;
+    margin: auto;
+}
+.budget {
+    width: 300px;
+}

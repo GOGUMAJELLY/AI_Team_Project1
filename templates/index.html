@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>My Way JP</title>
+        <link rel="stylesheet" type="text/css" href="static/style.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Dongle:wght@300&family=Orbit&display=swap" rel="stylesheet">
+    </head>    
+    <body>
+        <div class="div1">
+            <div class="logo">My Way JP</div>
+            <div class="slogan">일본 여행 경비 예측 서비스</div>
+            <div class="navigation">
+                <a href="https://lookerstudio.google.com/reporting/feefb17d-5196-4754-883a-b716340cd9a5">항공권 대시보드 바로가기</a> | 
+                <a href="https://lookerstudio.google.com/reporting/b28f27d3-65eb-4e11-b791-ed570d2f7be9">호텔 대시보드 바로가기</a>
+            </div> 
+        </div>
+
+        <div class="div2">
+            <form action="/project_web" method="POST">
+                <div class="section-title">여행일정</div>
+                <div class="form-group">
+                    <label for="round_trip">
+                        <input type="checkbox" id="round_trip" name="round_trip" onclick="enableReturnDate()">
+                        왕복
+                    </label>
+                    <label>가는날: <input type="date" name="departure_date"></label>
+                    <label>오는날: <input type="date" id="return_date" name="return_date" disabled></label>
+                </div>
+                <div class="form-group">
+                    <label>출발:
+                        <select id="departure" name="departure_airport" onchange="updateArrivalOptions()">
+                            <option value="">선택</option>
+                            <option value="GMP">국내 - 김포(GMP)</option>
+                            <option value="ICN">국내 - 인천(ICN)</option>
+                            <option value="HND">일본 - 도쿄(HND)</option>
+                            <option value="NRT">일본 - 도쿄(NRT)</option>
+                            <option value="KIX">일본 - 오사카(KIX)</option>
+                            <option value="FUK">일본 - 후쿠오카(FUK)</option>
+                        </select>
+                    </label>
+                    <label>도착:
+                        <select id="arrival_airport" name="arrival_airport">
+                            <option value="">선택</option>
+                            <option value="GMP">국내 - 김포(GMP)</option>
+                            <option value="ICN">국내 - 인천(ICN)</option>
+                            <option value="HND">일본 - 도쿄(HND)</option>
+                            <option value="NRT">일본 - 도쿄(NRT)</option>
+                            <option value="KIX">일본 - 오사카(KIX)</option>
+                            <option value="FUK">일본 - 후쿠오카(FUK)</option>
+                        </select>
+                    </label>
+                </div>
+                <div class="section-title">항공권</div>
+                <div class="form-group">
+                    <label for="one_way">
+                        <input type="checkbox" id="one_way" name="one_way" onclick="enableReturnDate()">
+                        직항
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label>선호 비행시간 :
+                        <div style="display: inline-flex;">
+                            <input type="number" id="hours" name="hours" min="0" max="23" placeholder="시">
+                            <input type="number" id="minutes" name="minutes" min="0" max="59" placeholder="분">
+                        </div>
+                    </label>
+                </div>
+                <div class="section-title">숙소</div>
+                <div class="form-group">
+                    <label>선호 호텔 등급:
+                        <select id="hotel_class" name="hotel_class">
+                            <option value="">선택</option>
+                            <option value="1">1성급</option>
+                            <option value="2">2성급</option>
+                            <option value="3">3성급</option>
+                            <option value="4">4성급</option>
+                            <option value="5">5성급</option>
+                        </select>
+                    </label>
+                </div>
+                <div class="form-group">
+                    <button class="submit" type="submit">제출</button>
+                </div>
+            </form>
+        </div>
+        <div class="div3" >
+            <div class="logo">예측 결과 ({{ trip_type }})</div>
+            <div class="img_box">
+                <div class="img_text">호텔 등급 설명(drag on)</div>
+                <img class="img" src="{{url_for('static', filename='등급표.JPG')}}" width= "800" height="600" alt="error">
+            </div>
+            <div class="slogan" style="justify-content: center;">좌석등급 별 항공사 항공권 가격 TOP3</div>
+            {% if top_airlines_by_class %}
+                {% for air_class, airlines in top_airlines_by_class.items() %}
+                <div style="border-style: solid; float: left; margin: 3px;">
+                    <div class="class_title" style="border-bottom: solid; display: flex; justify-content: center;">{{ air_class }}</div>
+                    {% if airlines %}
+                        <table>
+                            <tr>
+                                <th>항공사</th>
+                                <th>예측 가격</th>
+                            </tr>
+                            {% for airline, price in airlines.items() %}
+                                {% if air_class in price %}
+                                    <tr>
+                                        <td>{{ airline }}</td>
+                                        <td>{{ '%d만 %d원' | format(price[air_class] // 10000, price[air_class] % 10000) }}</td>
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+                        </table>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <div class="div4" style="border: solid; padding: 0px 2px 0px 2px;">
+            <div class="slogan" style="border-bottom: solid; display: flex; justify-content: center;">숙소 가격</div>
+            {% if hotel_star %}
+                <p>호텔 성급: {{ hotel_star }}</p>
+            {% endif %}
+            {% if num_nights and num_days %}
+                <p>{{ num_nights }}박 {{ num_days }}일</p>
+            {% endif %}
+            {% if hotel_prediction %}
+            <p style="font-weight: bold;">예측 가격: {{ '%d만 %d원' | format(hotel_prediction // 10000, hotel_prediction % 10000) }}</p>
+            {% endif %}
+        </div>
+
+        <script>
+            function enableReturnDate() {
+                var checkBox = document.getElementById("round_trip");
+                var returnDate = document.getElementById("return_date");
+
+                if (checkBox.checked == true){
+                    returnDate.disabled = false;
+                } else {
+                    returnDate.disabled = true;
+                }
+            }
+
+            function updateArrivalOptions() {
+                var departure = document.getElementById("departure").value;
+                var arrival = document.getElementById("arrival_airport");
+
+                // 도착지 선택지를 초기화합니다
+                arrival.innerHTML = "<option value=''>선택</option>";
+
+                if (departure === "ICN" | departure === "GMP") {
+                    // 출발지가 국내이면 도착지는 일본 도시만 선택 가능하도록 설정합니다
+                    arrival.options.add(new Option("일본 - 도쿄(HND)", "HND"));
+                    arrival.options.add(new Option("일본 - 도쿄(NRT)", "NRT"));
+                    arrival.options.add(new Option("일본 - 오사카(KIX)", "KIX"));
+                    arrival.options.add(new Option("일본 - 후쿠오카(FUK)", "FUK"));
+                } else{
+                    // 출발지가 일본이면 도착지는 국내 도시만 선택 가능하도록 설정합니다
+                    arrival.options.add(new Option("국내 - 김포(GMP)", "GMP"));
+                    arrival.options.add(new Option("국내 - 인천(ICN)", "ICN"));
+                }
+            }
+        </script>
+    </body>
+</html>
