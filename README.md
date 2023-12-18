@@ -23,7 +23,11 @@
 ## 프로젝트 과정
 - 웹 데이터를 크롤링
   - Selenium 사용해 네이버 호텔 및 항공권 웹 데이터를 크롤링 및 자동화 작업
-  - 크롤링한 데이터를 분석
+  - 크롤링한 데이터를 CSV 파일로 받음
+- 대시보드 작성(Looker Studio)
+  - 대시보드를 고민하다 진입이 쉽고 바로 수정이 가능한 Looker Studio를 채택함  
+    [항공권 대시보드 링크](https://lookerstudio.google.com/reporting/feefb17d-5196-4754-883a-b716340cd9a5/page/YzzXD)  
+    [호텔 대시보드 링크](https://lookerstudio.google.com/reporting/b28f27d3-65eb-4e11-b791-ed570d2f7be9/page/nZ2XD)
 <details>
   <summary>항공권 데이터 분석(상세보기 클릭)</summary>
     <ul>
@@ -99,7 +103,7 @@
 
 - 데이터는 DBeaver를 사용해 MySQL로 데이터베이스에 저장
 - ML 모델은 파이썬 라이브러리인 pkl을 사용해 복호화하여 사용함
-- 이후 Flask 개발해 웹에서 데이터를 입력 받을시 모델을 이용해 최저값을 예측해서 웹에 리턴해주는 방식으로 진행함
+- 이후 Flask 사용해 웹에서 데이터를 입력 받을시 모델을 이용해 최저값을 예측해서 웹에 리턴해주는 방식으로 진행함
 ### 완성된 결과물
 ![데이터 입력 창](https://github.com/GOGUMAJELLY/AI_Team_Project1/assets/60537140/23127c09-bb2b-419c-9831-c1a1bca93e11)
 ![결과 출력](https://github.com/GOGUMAJELLY/AI_Team_Project1/assets/60537140/afdf924d-99e7-463f-9464-7692c3c2ee72)
@@ -117,4 +121,5 @@
 - 미흡한점
   - 내가 생각보다 SQL언어, 웹 디자인, Flask 사용이 많이 미숙하다는걸 알았고 도와줄려 했지만 큰 도움이 되진 않았다.
   - CS지식이 더 있었으면 웹 크롤링을 할때나 EDA 과정에서 좀더 의견을 낼 수 있지 않았을까 한다.
+  - Meatabase 와 Looker Studio 둘다 사용해봤지만 내가 SQL 지식이 적어 결국 접근성이 쉽지만 표현할 수 있는게 적은 루커 스튜디오를 선택했다.
   - 개인적으로 계속 일을 하지 않으면 내가 한 일이 없다 생각하는 경향이 있는걸 이번에 깨달았다. 이런 생각을 없애기 위해 노력을하자!
